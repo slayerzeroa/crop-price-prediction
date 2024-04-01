@@ -1,1 +1,1 @@
-# crop_price_pricture_prediction
+# crop_price_picture_prediction
