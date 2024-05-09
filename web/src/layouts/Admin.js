@@ -79,10 +79,10 @@ function Admin(props) {
         </Routes>
         <Footer fluid />
       </div>
-      <FixedPlugin
+      {/* <FixedPlugin
         bgColor={backgroundColor}
         handleColorClick={handleColorClick}
-      />
+      /> */}
     </div>
   );
 }
