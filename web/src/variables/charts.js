@@ -18,6 +18,7 @@
 // ##############################
 // // // Function that converts a hex color number to a RGB color number
 // #############################
+
 function hexToRGB(hex, alpha) {
   var r = parseInt(hex.slice(1, 3), 16),
     g = parseInt(hex.slice(3, 5), 16),
@@ -177,6 +178,7 @@ const dashboardPanelChart = {
           backgroundColor: gradientFill,
           borderWidth: 2,
           tension: 0.4,
+
           data: [50, 150, 100, 190, 130, 90, 150, 160, 120, 140, 190, 95],
         },
       ],

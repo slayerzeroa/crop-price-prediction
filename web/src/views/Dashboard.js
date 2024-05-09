@@ -1,21 +1,4 @@
-/*!
-
-=========================================================
-* Now UI Dashboard React - v1.5.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/now-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/now-ui-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
+import React, { useState, useEffect } from "react";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
 
@@ -51,15 +34,56 @@ import {
 } from "variables/charts.js";
 
 function Dashboard() {
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Price Data",
+        data: [],
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:3300/price")
+      .then((response) => response.json())
+      .then((data) => {
+        const labels = data.map((item) => item.date);
+        const dataPoints = data.map((item) => item.price);
+        setChartData({
+          labels: labels,
+          datasets: [
+            {
+              ...chartData.datasets[0],
+              data: dataPoints,
+            },
+          ],
+        });
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, []);
   return (
     <>
-      <PanelHeader
+      {/* <PanelHeader
         size="lg"
         content={
           <Line
             data={dashboardPanelChart.data}
             options={dashboardPanelChart.options}
           />
+        }
+      /> */}
+      {/* <PanelHeader
+        size="lg"
+        content={<Line data={chartData} options={{ responsive: true }} />}
+      /> */}
+      <PanelHeader
+        size="lg"
+        content={
+          <Line data={chartData} options={dashboardPanelChart.options} />
         }
       />
       <div className="content">
