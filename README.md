@@ -1,4 +1,4 @@
-# crop_price_picture_prediction
+# crop_price_prediction
 
 ### 1. Introduction
 
