@@ -24,14 +24,23 @@ import "assets/scss/now-ui-dashboard.scss?v1.5.0";
 import "assets/css/demo.css";
 
 import AdminLayout from "layouts/Admin.js";
+import Main from "./pages/Main";
+import Service from "./pages/Service";
+import Forecast from "./pages/Forecast";
+import Additional from "./pages/Additional";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
     <Routes>
+      <Route path="/" element={<Navigate to="/main" replace />} />
+      <Route path="/main" element={<Main />} />
+      <Route path="/service" element={<Service />} />
+      <Route path="/forecast" element={<Forecast />} />
+      <Route path="/additional" element={<Additional />} />
       <Route path="/admin/*" element={<AdminLayout />} />
-      <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
+      {/* <Route path="*" element={<Navigate to="/admin/dashboard" replace />} /> */}
     </Routes>
   </BrowserRouter>
 );

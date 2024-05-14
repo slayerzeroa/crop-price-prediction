@@ -1,9 +1,9 @@
 {
-  "name": "now-ui-dashboard-react",
+  "name": "배추도사",
   "version": "1.5.2",
   "main": "dist/index.js",
   "private": true,
-  "homepage": "https://demos.creative-tim.com/now-ui-dashboard-react/#/",
+  "homepage": "/",
   "dependencies": {
     "bootstrap": "4.6.2",
     "chart.js": "3.9.1",
