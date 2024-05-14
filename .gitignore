@@ -1,4 +1,4 @@
 /web/node_modules
 /server/node_modules
 /model/trained
-/data
+/data/raw

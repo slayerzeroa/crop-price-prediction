@@ -6,7 +6,7 @@ function Forecast() {
     <div>
       <IndexNavbar />
 
-      <h2>Forecast 페이지</h2>
+      {/* <h2>Forecast 페이지</h2> */}
       <Dashboard />
     </div>
   );
