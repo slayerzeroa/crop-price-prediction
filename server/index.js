@@ -35,6 +35,17 @@ app.get("/price", (req, res) => {
     });
 });
 
+// 예측값 데이터 읽어오기
+app.get("/prediction", (req, res) => {
+  const results = [];
+  fs.createReadStream(path.join(__dirname, "../data/prediction/prediction.csv"))
+    .pipe(csv())
+    .on("data", (data) => results.push(data))
+    .on("end", () => {
+      res.json(results);
+    });
+});
+
 const PORT = 3300;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
