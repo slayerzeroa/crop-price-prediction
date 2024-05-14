@@ -65,6 +65,38 @@ function Dashboard() {
       })
       .catch((error) => console.error("Error fetching data: ", error));
   }, []);
+
+  const [predData, setPredData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Prediction Data",
+        data: [],
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:3300/prediction")
+      .then((response) => response.json())
+      .then((data) => {
+        const labels = data.map((item) => item.date);
+        const dataPoints = data.map((item) => item.prediction);
+        setPredData({
+          labels: labels,
+          datasets: [
+            {
+              ...predData.datasets[0],
+              data: dataPoints,
+            },
+          ],
+        });
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, []);
   return (
     <>
       {/* <PanelHeader
@@ -80,11 +112,17 @@ function Dashboard() {
         size="lg"
         content={<Line data={chartData} options={{ responsive: true }} />}
       /> */}
+      <h5 className="card-category">Price Data</h5>
       <PanelHeader
         size="lg"
         content={
           <Line data={chartData} options={dashboardPanelChart.options} />
         }
+      />
+      <h5 className="card-category">Predcition Data</h5>
+      <PanelHeader
+        size="lg"
+        content={<Line data={predData} options={dashboardPanelChart.options} />}
       />
       <div className="content">
         <Row>
