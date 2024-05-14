@@ -7,6 +7,7 @@ const app = express();
 const path = require("path");
 const cors = require("cors");
 app.use(cors());
+
 // 루트 URL에 대한 GET 요청 처리
 app.get("/", (req, res) => {
   res.send("Welcome to the server!");
