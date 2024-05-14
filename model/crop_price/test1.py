@@ -33,13 +33,14 @@ scale_cols = ['temp', 'high_temp', 'low_temp', 'rain', 'wind', 'humidity', 'suns
 
 df_scaled = scaler.fit_transform(df[scale_cols])
 df_scaled = pd.DataFrame(df_scaled)
+df_scaled['date'] = df['date']
 df_scaled['price'] = df['price']
 df_scaled['price_t1'] = df['price'].shift(1)
 df_scaled['price_t2'] = df['price'].shift(2)
 df_scaled['price_t3'] = df['price'].shift(3)
 df_scaled['price_t4'] = df['price'].shift(4)
 df_scaled['price_t5'] = df['price'].shift(5)
-df_scaled.columns = scale_cols + ['price', 'price_t1', 'price_t2', 'price_t3', 'price_t4', 'price_t5']
+df_scaled.columns = scale_cols + ['date', 'price', 'price_t1', 'price_t2', 'price_t3', 'price_t4', 'price_t5']
 
 # df_scaled['KRW/USD'] = df['KRW/USD']
 
@@ -53,13 +54,15 @@ df_scaled = df_scaled.dropna()
 
 train, test = train_test_split(df_scaled, test_size=0.2, random_state=1234, shuffle=False)
 
-train_x = train.drop('target', axis=1)
+train_date = train['date'].tolist()
+test_date = test['date'].tolist()
+
+train_x = train.drop(['date', 'target'], axis=1)
 train_y = train[['target']]
-test_x = test.drop('target', axis=1)
+test_x = test.drop(['date', 'target'], axis=1)
 test_y = test[['target']]
 date_list = df['date'].tolist()
-train_date = date_list[:int(len(date_list) * 0.8)]
-test_date = date_list[int(len(date_list) * 0.8):]
+
 
 train_x = train_x.values
 train_y = train_y.values
@@ -167,6 +170,11 @@ pred = (pred_xgb + pred_rf + pred_cat) / 3
 print("ensemble mse:", mean_squared_error(test_y, pred))
 print("ensemble r2:", r2_score(test_y, pred))
 
+
+df = pd.DataFrame([test_date, pred])
+df = df.T
+df.columns = ['date', 'prediction']
+df.to_csv("data/prediction/prediction.csv", index=False)
 # plt.plot(test_y, label='actual')
 # plt.plot(pred, label='prediction')
 # plt.xticks(np.arange(0, len(test_y), step=100), test_date[::100])
