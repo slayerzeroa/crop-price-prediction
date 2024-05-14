@@ -1,5 +1,6 @@
 import React from "react";
 import IndexNavbar from "../components/Navbars/CustomNavbar";
+import Introduce from "../views/Introduce";
 
 function Service() {
   return (
@@ -7,7 +8,7 @@ function Service() {
       <IndexNavbar />
 
       <h2>Service 페이지</h2>
-      {/* Service 페이지의 내용 */}
+      <Introduce />
     </div>
   );
 }

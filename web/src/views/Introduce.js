@@ -4,7 +4,7 @@ import Daemyeong from "../assets/img/images/Daemyeong.jpeg";
 import Daeun from "../assets/img/images/Daeun.jpeg";
 import Heeji from "../assets/img/images/Heeji.jpeg";
 
-function Service() {
+function Introduce() {
   return (
     <div>
       <div className="t-left fw-bold">
@@ -95,4 +95,4 @@ function Service() {
   );
 }
 
-export default Service;
+export default Introduce;
