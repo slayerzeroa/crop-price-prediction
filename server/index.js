@@ -35,6 +35,18 @@ app.get("/price", (req, res) => {
     });
 });
 
+// 최근 30일 데이터만 추출
+app.get("/recent", (req, res) => {
+  const results = [];
+  fs.createReadStream(path.join(__dirname, "../data/preprocessed/data.csv"))
+    .pipe(csv())
+    .on("data", (data) => results.push(data))
+    .on("end", () => {
+      const recent = results.slice(-30);
+      res.json(recent);
+    });
+});
+
 // 예측값 데이터 읽어오기
 app.get("/prediction", (req, res) => {
   const results = [];
