@@ -2,3 +2,4 @@
 /server/node_modules
 /model/trained
 /data/raw
+/env
