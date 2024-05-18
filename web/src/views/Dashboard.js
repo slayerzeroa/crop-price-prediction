@@ -48,7 +48,7 @@ function Dashboard() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3300/price")
+    fetch("http://localhost:3300/recent")
       .then((response) => response.json())
       .then((data) => {
         const labels = data.map((item) => item.date);
