@@ -1,6 +1,7 @@
 import requests
 import json
 import pandas as pd
+import datetime
 
 # 품목 코드 파일을 읽어오기
 codes = pd.read_csv('data/function/api/documents/kamis_api/crop_code.csv', encoding='utf-8')
@@ -51,7 +52,7 @@ def get_daily_sales_list():
 # print(get_daily_sales_list())
 
 
-def get_item_price( p_startday, p_endday):
+def get_item_price(p_startday, p_endday):
     api_url = "http://www.kamis.or.kr/service/price/xml.do?action=periodProductList"
         
     # API 키와 아이디를 읽어오기
@@ -75,16 +76,28 @@ def get_item_price( p_startday, p_endday):
         "p_itemcode": p_itemcode,
     }
 
-    # 디버깅을 위한 출력
-    print("Request URL:", api_url)
-    print("Request Parameters:", params)
+    # # 디버깅을 위한 출력
+    # print("Request URL:", api_url)
+    # print("Request Parameters:", params)
 
     # GET 요청 보내기
     response = requests.get(api_url, params=params)
 
-    # 응답 코드 확인
-    print(f"Response Code: {response.status_code}")
+    # # 응답 코드 확인
+    # print(f"Response Code: {response.status_code}")
 
     return response.json()
 
-print(get_item_price("2021-09-01", "2021-09-01"))
+
+def get_item_price_at_date(date: datetime.datetime = datetime.datetime.now()-datetime.timedelta(days=2)):
+    date = datetime.datetime.strftime(date, "%Y-%m-%d")
+    data = get_item_price(date, date)['data']['item']
+    for i in data:
+        if i['countyname'] != '평균':
+            continue
+        else:
+            # 가격 , 없애기
+            i['price'] = i['price'].replace(',', '')
+            price = int(i['price'])
+            return[date, price]
+        
