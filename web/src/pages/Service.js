@@ -7,7 +7,6 @@ function Service() {
     <div>
       <IndexNavbar />
 
-      <h2>Service 페이지</h2>
       <Introduce />
     </div>
   );
