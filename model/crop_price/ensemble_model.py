@@ -15,6 +15,8 @@ import joblib
 
 import matplotlib.pyplot as plt
 
+from datetime import timedelta
+
 # # FFNN prediction
 # import torch
 # import torch.nn as nn
@@ -174,6 +176,12 @@ print("ensemble r2:", r2_score(test_y, pred))
 df = pd.DataFrame([test_date, pred])
 df = df.T
 df.columns = ['date', 'prediction']
+
+print(df['date'])
+# 30일 더하기
+df['date'] = pd.to_datetime(df['date']) + timedelta(days=30)
+
+print(df['date'])
 df.to_csv("data/prediction/prediction.csv", index=False)
 
 # plt.plot(test_y, label='actual')

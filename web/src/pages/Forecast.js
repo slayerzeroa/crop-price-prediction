@@ -4,18 +4,15 @@ import Dashboard from "views/Dashboard";
 import Predict from "../views/Predict";
 import Koreamap from "../views/Koreamap";
 import Search from "../views/Search";
-
+import Information from "views/Information";
 function Forecast() {
   return (
     <div>
       <IndexNavbar />
       <Search />
-
       <Predict />
-
-      {/* <h2>Forecast 페이지</h2> */}
-
       <Koreamap />
+      <Information />
       <Dashboard />
     </div>
   );
