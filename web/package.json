@@ -1,5 +1,5 @@
 {
-  "name": "배추도사",
+  "name": "crop_price_prediction_web",
   "version": "1.5.2",
   "main": "dist/index.js",
   "private": true,
