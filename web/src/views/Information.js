@@ -48,7 +48,7 @@ function Information() {
     ],
   });
   useEffect(() => {
-    fetch("http://localhost:5556/recent")
+    fetch("http://ajoufe.iptime.org:5556/recent")
       .then((response) => response.json())
       .then((data) => {
         const labels = data.map((item) => item.date);
@@ -80,7 +80,7 @@ function Information() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5556/prediction")
+    fetch("http://ajoufe.iptime.org:5556/prediction")
       .then((response) => response.json())
       .then((data) => {
         const labels = data.map((item) => item.date);
