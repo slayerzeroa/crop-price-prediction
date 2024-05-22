@@ -176,12 +176,12 @@ df = df.T
 df.columns = ['date', 'prediction']
 df.to_csv("data/prediction/prediction.csv", index=False)
 
-# plt.plot(test_y, label='actual')
-# plt.plot(pred, label='prediction')
-# plt.xticks(np.arange(0, len(test_y), step=100), test_date[::100])
-# plt.legend()
-# plt.title(f"Ensemble price prediction {delay} days later")
-# plt.show()
+plt.plot(test_y, label='actual')
+plt.plot(pred, label='prediction')
+plt.xticks(np.arange(0, len(test_y), step=100), test_date[::100])
+plt.legend()
+plt.title(f"Ensemble price prediction {delay} days later")
+plt.show()
 
 
 # # predict

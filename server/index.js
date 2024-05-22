@@ -87,16 +87,22 @@ app.get("/recent", (req, res) => {
   });
 });
 
-// // 예측값 데이터 읽어오기
-// app.get("/prediction", (req, res) => {
-//   const results = [];
-//   fs.createReadStream(path.join(__dirname, "../data/prediction/prediction.csv"))
-//     .pipe(csv())
-//     .on("data", (data) => results.push(data))
-//     .on("end", () => {
-//       res.json(results);
-//     });
-// });
+// 예측값 데이터 읽어오기
+app.get("/prediction", (req, res) => {
+  const results = [];
+  // mariadb에서 데이터 읽어오기
+  pool.getConnection().then((conn) => {
+    conn
+      .query("SELECT ymd, pred FROM crop ORDER BY ymd DESC LIMIT 10")
+      .then((rows) => {
+        rows.forEach((row) => {
+          results.push(row);
+        });
+        res.json(results);
+      });
+    conn.release();
+  });
+});
 
 const PORT = 5556;
 app.listen(PORT, () => {

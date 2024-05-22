@@ -43,7 +43,7 @@ def insert_row(data: list):
 
     # 데이터 저장
     for i in range(len(df)):
-        sql = f"INSERT INTO train VALUES ('{df['ymd'][i]}', {df['price'][i]}, {df['dayAvgRhm'][i]}, {df['dayAvgTa'][i]}, {df['dayAvgWs'][i]}, {df['dayMaxTa'][i]}, {df['dayMinRhm'][i]}, {df['dayMinTa'][i]}, {df['daySumRn'][i]}, {df['daySumSs'][i]})"
+        sql = f"INSERT INTO crop VALUES ('{df['ymd'][i]}', {df['price'][i]}, {df['dayAvgRhm'][i]}, {df['dayAvgTa'][i]}, {df['dayAvgWs'][i]}, {df['dayMaxTa'][i]}, {df['dayMinRhm'][i]}, {df['dayMinTa'][i]}, {df['daySumRn'][i]}, {df['daySumSs'][i]})"
         curs.execute(sql)
     conn.commit()
 
@@ -57,7 +57,7 @@ def del_row(date: str):
     conn = pymysql.connect(host='localhost', user='root', password='1234', db='aicapstone', charset='utf8')
     curs = conn.cursor()
 
-    sql = f"DELETE FROM train WHERE ymd = '{date}'"
+    sql = f"DELETE FROM crop WHERE ymd = '{date}'"
     curs.execute(sql)
 
     conn.commit()
@@ -66,8 +66,10 @@ def del_row(date: str):
 def str_to_date(date: str):
     return datetime.datetime.strptime(date, '%Y-%m-%d')
 
+date = datetime.datetime.now()
+date -= datetime.timedelta(days=2)
 
-# date = datetime.datetime.now()
+insert_row(get_api_data(date))
 
 # for i in range(1, 365):
 #     try:
