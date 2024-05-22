@@ -56,7 +56,7 @@ def get_item_price(p_startday, p_endday):
     api_url = "http://www.kamis.or.kr/service/price/xml.do?action=periodProductList"
         
     # API 키와 아이디를 읽어오기
-    with open('env/kamis_api_key.txt', 'r') as f:
+    with open('env/api/kamis_api_key.txt', 'r') as f:
         cert_key = f.readline().strip()
         cert_id = f.readline().strip()
 
