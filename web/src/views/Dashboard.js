@@ -51,8 +51,8 @@ function Dashboard() {
     fetch("http://ajoufe.iptime.org:5556/recent")
       .then((response) => response.json())
       .then((data) => {
-        const labels = data.map((item) => item.ymd);
-        const dataPoints = data.map((item) => item.price);
+        const labels = data.map((item) => item.ymd).reverse();
+        const dataPoints = data.map((item) => item.price).reverse();
         setChartData({
           labels: labels,
           datasets: [
@@ -80,11 +80,11 @@ function Dashboard() {
   });
 
   useEffect(() => {
-    fetch("http://ajoufe.iptime.org:5556/prediction")
+    fetch("http://ajoufe.iptime.org:5556/pred")
       .then((response) => response.json())
       .then((data) => {
-        const labels = data.map((item) => item.ymd);
-        const dataPoints = data.map((item) => item.prediction);
+        const labels = data.map((item) => item.ymd).reverse();
+        const dataPoints = data.map((item) => item.pred).reverse();
         setPredData({
           labels: labels,
           datasets: [
