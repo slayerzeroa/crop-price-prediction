@@ -8,6 +8,8 @@ import pandas as pd
 
 import model.crop_price.predict as predict 
 
+import time
+
 
 # db_env 가져오기
 def get_db_env():
@@ -72,9 +74,6 @@ def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedel
     # db에 예측값 추가
     insert_row(get_api_data(date), pred=pred)
 
-# date = datetime.datetime.now()
-# date -= datetime.timedelta(days=2)
-
-# insert_row(get_api_data(date))
-
-
+while True:
+    update_db()
+    time.sleep(86400) # 1 day
