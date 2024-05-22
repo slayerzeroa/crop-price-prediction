@@ -88,7 +88,7 @@ app.get("/recent", (req, res) => {
 });
 
 // 예측값 데이터 읽어오기
-app.get("/prediction", (req, res) => {
+app.get("/pred", (req, res) => {
   const results = [];
   // mariadb에서 데이터 읽어오기
   pool.getConnection().then((conn) => {
