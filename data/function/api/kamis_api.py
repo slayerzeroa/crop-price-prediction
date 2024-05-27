@@ -100,4 +100,3 @@ def get_item_price_at_date(date: datetime.datetime = datetime.datetime.now()-dat
             i['price'] = i['price'].replace(',', '')
             price = int(i['price'])
             return[date, price]
-        

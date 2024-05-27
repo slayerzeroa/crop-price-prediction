@@ -6,6 +6,7 @@ import WordCloud from "../views/Wordcloud";
 import WordCloud2 from "../views/Wordcloud2";
 import Graph from "../views/Graph";
 import Search from "../views/Search";
+import Trend from "../views/Trend";
 
 function Additional() {
   return (
@@ -13,6 +14,7 @@ function Additional() {
       <IndexNavbar />
 
       <Search />
+      <Trend />
 
       <Graph />
       <h4>wordcloud 들어갈거야</h4>
