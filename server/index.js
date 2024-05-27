@@ -104,6 +104,44 @@ app.get("/pred", (req, res) => {
   });
 });
 
+app.get("/nongnet", (req, res) => {
+  const results = [];
+  pool
+    .getConnection()
+    .then((conn) => {
+      conn
+        // ymd가 오늘 날짜인 데이터, 그 중에서도 curSlsAmt 상위 5개만 가져오기
+        .query(
+          "SELECT * FROM nongnet WHERE ymd = CURDATE() ORDER BY curSlsAmt DESC LIMIT 5"
+        )
+        .then((rows) => {
+          rows.forEach((row) => {
+            // 객체의 모든 BigInt 값을 문자열로 변환
+            const convertedRow = {};
+            for (let key in row) {
+              if (typeof row[key] === "bigint") {
+                // BigInt를 문자열로 변환
+                convertedRow[key] = row[key].toString();
+              } else {
+                convertedRow[key] = row[key];
+              }
+            }
+            results.push(convertedRow);
+          });
+          res.json(results); // 변환된 결과를 JSON으로 응답
+        })
+        .catch((err) => {
+          console.error("Database query error:", err);
+          res.status(500).json({ error: "Database query failed" });
+        });
+      conn.release();
+    })
+    .catch((err) => {
+      console.error("Database connection error:", err);
+      res.status(500).json({ error: "Failed to connect to database" });
+    });
+});
+
 const PORT = 5556;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
