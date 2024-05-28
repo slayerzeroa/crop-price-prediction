@@ -74,20 +74,6 @@ def del_row(date: str):
 def str_to_date(date: str):
     return datetime.datetime.strptime(date, '%Y-%m-%d')
 
-def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedelta(days=2)):
-    insert_row(get_api_data(date))
-    pred = predict.predict_update_price()
-
-    print(f'pred: {pred}')
-
-    # db 마지막 행 삭제
-    del_row(datetime.datetime.strftime(date, '%Y-%m-%d'))
-    # db에 예측값 추가
-    insert_row(get_api_data(date, pred=pred))
-
-    # nongnet table 데이터 추가
-    insert_nongnet()
-
 
 def insert_nongnet():
     host, user, password, db = get_db_env()
@@ -119,11 +105,63 @@ def insert_nongnet():
     # DB 연결 종료
     conn.close()
 
+def insert_dosomae(date: datetime.datetime = datetime.datetime.now()-datetime.timedelta(days=1)):
+    host, user, password, db = get_db_env()
+    # DB 연결
+    conn = pymysql.connect(host=host, user=user, password=password, db=db, charset='utf8') 
+    curs = conn.cursor()
 
-# update_db(datetime.datetime.now()-datetime.timedelta(days=2))
+    # 데이터 가져오기
+    df = kamis.get_whole_retail_at_date(date=date)
 
-# update_db()
+    # , 제거
+    df['wholesale_price'] = df['wholesale_price'].str.replace(',', '')
+    df['wholesale_price_1m_ago'] = df['wholesale_price_1m_ago'].str.replace(',', '')
+    df['wholesale_price_1y_ago'] = df['wholesale_price_1y_ago'].str.replace(',', '')
+    df['wholesale_price_avg'] = df['wholesale_price_avg'].str.replace(',', '')
+    df['retail_price'] = df['retail_price'].str.replace(',', '')
+    df['retail_price_1m_ago'] = df['retail_price_1m_ago'].str.replace(',', '')
+    df['retail_price_1y_ago'] = df['retail_price_1y_ago'].str.replace(',', '')
+    df['retail_price_avg'] = df['retail_price_avg'].str.replace(',', '')
 
-# while True:
-#     time.sleep(86400) # 1 day
-#     update_db()
+    # -1은 NaN값을 의미
+    df.replace('-', None, inplace=True)
+    df.fillna(-1, inplace=True)
+
+    '''
+    ymd: 년월일
+    type: 작물명
+    kind: 작물상세분류
+    rank: 상품등급
+    local: 지역명
+    wholesale_price: 도매가
+    retail_price: 소매가
+    '''
+
+    # 데이터 저장
+    for i in range(len(df)):
+        sql = f"INSERT INTO dosomae VALUES ('{df['ymd'][i]}', '{df['type'][i]}', '{df['kind'][i]}', '{df['rank'][i]}', '{df['local'][i]}', '{df['wholesale_price'][i]}', '{df['wholesale_price_1m_ago'][i]}',  '{df['wholesale_price_1y_ago'][i]}',  '{df['wholesale_price_avg'][i]}', '{df['retail_price'][i]}', '{df['retail_price_1m_ago'][i]}', '{df['retail_price_1y_ago'][i]}','{df['retail_price_avg'][i]}')"
+        curs.execute(sql)
+    conn.commit()
+
+    # DB 연결 종료
+    conn.close()
+
+def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedelta(days=2)):
+    insert_row(get_api_data(date))
+    pred = predict.predict_update_price()
+
+    print(f'pred: {pred}')
+
+    # db 마지막 행 삭제
+    del_row(datetime.datetime.strftime(date, '%Y-%m-%d'))
+    # db에 예측값 추가
+    insert_row(get_api_data(date, pred=pred))
+
+    # nongnet table 데이터 추가
+    insert_nongnet()
+
+
+while True:
+    time.sleep(86400) # 1 day
+    update_db()

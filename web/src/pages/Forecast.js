@@ -12,9 +12,9 @@ function Forecast() {
       <IndexNavbar />
       <Search />
       <Predict />
-      <Koreamap />
       <Information />
       <Dashboard />
+      <Koreamap />
     </div>
   );
 }

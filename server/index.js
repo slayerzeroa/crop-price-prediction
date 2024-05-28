@@ -142,6 +142,25 @@ app.get("/nongnet", (req, res) => {
     });
 });
 
+// 예측값 데이터 읽어오기
+app.get("/dosomae", (req, res) => {
+  const results = [];
+  // mariadb에서 데이터 읽어오기
+  pool.getConnection().then((conn) => {
+    conn
+      .query(
+        "SELECT * FROM dosomae WHERE ymd = DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND type = '배추'"
+      )
+      .then((rows) => {
+        rows.forEach((row) => {
+          results.push(row);
+        });
+        res.json(results);
+      });
+    conn.release();
+  });
+});
+
 const PORT = 5556;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
