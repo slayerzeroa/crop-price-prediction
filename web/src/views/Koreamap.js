@@ -8,7 +8,7 @@ function Koreamap() {
   return (
     <div>
       <hr />
-      <div className="predict-title">
+      {/* <div className="predict-title">
         <h1 className="prediction-text">배추 생산량 예측</h1>
       </div>
       <div className="predict-wrapper">
@@ -30,7 +30,7 @@ function Koreamap() {
         </div>
       </div>
 
-      <h4>생산량 예측 정보 꺾은선 그래프</h4>
+      <h4>생산량 예측 정보 꺾은선 그래프</h4> */}
       <div className="predict-info-title">
         {" "}
         우리나라 지역별 배추 생산량 지도{" "}

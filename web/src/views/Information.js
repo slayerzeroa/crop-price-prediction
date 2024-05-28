@@ -48,10 +48,10 @@ function Information() {
     ],
   });
   useEffect(() => {
-    fetch("http://localhost:5556/recent")
+    fetch("http://ajoufe.iptime.org:5556/recent")
       .then((response) => response.json())
       .then((data) => {
-        const labels = data.map((item) => item.date);
+        const labels = data.map((item) => item.ymd);
         const dataPoints = data.map((item) => item.price);
         setNowData({
           labels: labels,
@@ -80,11 +80,11 @@ function Information() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5556/prediction")
+    fetch("http://ajoufe.iptime.org:5556/pred")
       .then((response) => response.json())
       .then((data) => {
-        const labels = data.map((item) => item.date);
-        const dataPoints = data.map((item) => item.prediction);
+        const labels = data.map((item) => item.ymd);
+        const dataPoints = data.map((item) => item.pred);
         setPredData({
           labels: labels,
           datasets: [
@@ -115,16 +115,12 @@ function Information() {
                 <Col xs={12} md={6}>
                   <Card>
                     <CardHeader>
-                      <h5 className="card-category">2024.05.16</h5>
+                      <h5 className="card-category">{nowData.labels[0]}</h5>
                       <CardTitle tag="h4">배추 현재 가격</CardTitle>
                     </CardHeader>
                     <CardBody>
                       <h3 className="card-category">
-                        {
-                          nowData.datasets[0].data[
-                            nowData.datasets[0].data.length - 1
-                          ]
-                        }
+                        {nowData.datasets[0].data[0]}
                       </h3>
                     </CardBody>
                     <CardFooter>
@@ -139,16 +135,12 @@ function Information() {
                 <Col xs={12} md={6}>
                   <Card className="card-tasks">
                     <CardHeader>
-                      <h5 className="card-category">2024.06.30</h5>
+                      <h5 className="card-category">{predData.labels[0]}</h5>
                       <CardTitle tag="h4">배추 예측 가격</CardTitle>
                     </CardHeader>
                     <CardBody>
                       <h3 className="card-category">
-                        {
-                          predData.datasets[0].data[
-                            predData.datasets[0].data.length - 1
-                          ]
-                        }
+                        {predData.datasets[0].data[0]}
                       </h3>
                     </CardBody>
                     <CardFooter>

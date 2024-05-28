@@ -7,7 +7,7 @@ def only_date(data):
 
 
 def main_location_mean(date: datetime.datetime = datetime.datetime.now()-datetime.timedelta(days=2)):
-    f = open('env/datago_weather_api_key.txt', 'r')
+    f = open('env/api/datago_weather_api_key.txt', 'r')
     api_key = f.read()
 
     start = datetime.datetime.strftime(date, "%Y%m%d")
