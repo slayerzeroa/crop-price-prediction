@@ -33,70 +33,213 @@ import {
   dashboard24HoursPerformanceChart,
 } from "variables/charts.js";
 
+import "./Dashboard.css"; // CSS 파일 임포트
+
 function Dashboard() {
+  // const [chartData, setChartData] = useState({
+  //   labels: [],
+  //   datasets: [
+  //     {
+  //       label: "Price Data",
+  //       data: [],
+  //       fill: false,
+  //       borderColor: "rgb(75, 192, 192)",
+  //       tension: 0.1,
+  //     },
+  //   ],
+  // });
+
+  // useEffect(() => {
+  //   fetch("http://ajoufe.iptime.org:5556/recent")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const labels = data.map((item) => item.ymd).reverse();
+  //       const dataPoints = data.map((item) => item.price).reverse();
+  //       setChartData({
+  //         labels: labels,
+  //         datasets: [
+  //           {
+  //             ...chartData.datasets[0],
+  //             data: dataPoints,
+  //           },
+  //         ],
+  //       });
+  //     })
+  //     .catch((error) => console.error("Error fetching data: ", error));
+  // }, []);
+
+  // const [predData, setPredData] = useState({
+  //   labels: [],
+  //   datasets: [
+  //     {
+  //       label: "Prediction Data",
+  //       data: [],
+  //       fill: false,
+  //       borderColor: "rgb(75, 192, 192)",
+  //       tension: 0.1,
+  //     },
+  //   ],
+  // });
+
+  // useEffect(() => {
+  //   fetch("http://ajoufe.iptime.org:5556/pred")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const labels = data.map((item) => item.ymd).reverse();
+  //       const dataPoints = data.map((item) => item.pred).reverse();
+  //       setPredData({
+  //         labels: labels,
+  //         datasets: [
+  //           {
+  //             ...predData.datasets[0],
+  //             data: dataPoints,
+  //           },
+  //         ],
+  //       });
+  //     })
+  //     .catch((error) => console.error("Error fetching data: ", error));
+  // }, []);
+
   const [chartData, setChartData] = useState({
-    labels: [],
+    labels: [], // 공유 x축 레이블
     datasets: [
       {
         label: "Price Data",
         data: [],
-        fill: false,
         borderColor: "rgb(75, 192, 192)",
+        backgroundColor: "rgba(75, 192, 192, 0.5)",
+        fill: false,
         tension: 0.1,
       },
-    ],
-  });
-
-  useEffect(() => {
-    fetch("http://ajoufe.iptime.org:5556/recent")
-      .then((response) => response.json())
-      .then((data) => {
-        const labels = data.map((item) => item.ymd).reverse();
-        const dataPoints = data.map((item) => item.price).reverse();
-        setChartData({
-          labels: labels,
-          datasets: [
-            {
-              ...chartData.datasets[0],
-              data: dataPoints,
-            },
-          ],
-        });
-      })
-      .catch((error) => console.error("Error fetching data: ", error));
-  }, []);
-
-  const [predData, setPredData] = useState({
-    labels: [],
-    datasets: [
       {
         label: "Prediction Data",
         data: [],
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
     ],
   });
+  // // pred는 10일 뒤로 밀고
+  // // price는 10:부터 인덱싱
+  // useEffect(() => {
+  //   // 가정: 같은 API로부터 가격 데이터와 예측 데이터를 받아옵니다.
+  //   fetch("http://ajoufe.iptime.org:5556/data")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const labels = data.map((item) => item.ymd);
+  //       const prices = data.map((item) => item.price);
+  //       const pred = data.map((item) => item.pred);
+  //       setChartData((prev) => ({
+  //         ...prev,
+  //         labels: labels,
+  //         datasets: [
+  //           { ...prev.datasets[0], data: prices },
+  //           { ...prev.datasets[1], data: pred },
+  //         ],
+  //       }));
+  //     })
+  //     .catch((error) => console.error("Error fetching data: ", error));
+  // }, []);
 
   useEffect(() => {
-    fetch("http://ajoufe.iptime.org:5556/pred")
+    // 가정: 같은 API로부터 가격 데이터와 예측 데이터를 받아옵니다.
+    fetch("http://ajoufe.iptime.org:5556/data")
       .then((response) => response.json())
       .then((data) => {
-        const labels = data.map((item) => item.ymd).reverse();
-        const dataPoints = data.map((item) => item.pred).reverse();
-        setPredData({
-          labels: labels,
+        const labels = data.map((item) => item.ymd);
+        const prices = data.map((item) => item.price).slice(5); // 10일부터 시작
+        const predictions = data.map((item) => item.pred);
+
+        // 10일 뒤로 밀기 위해 앞에 10개의 null 값을 추가
+        const adjustedPredictions = new Array(5)
+          .fill(null)
+          .concat(predictions.slice(0, -5));
+
+        setChartData((prev) => ({
+          ...prev,
+          labels: labels.slice(5), // 레이블도 10일부터 맞춤
           datasets: [
-            {
-              ...predData.datasets[0],
-              data: dataPoints,
-            },
+            { ...prev.datasets[0], data: prices },
+            { ...prev.datasets[1], data: adjustedPredictions },
           ],
-        });
+        }));
       })
       .catch((error) => console.error("Error fetching data: ", error));
   }, []);
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      backgroundColor: "rgba(0, 0, 0, 0)", // 배경색 설정
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false, // x축 그리드 제거
+        },
+        ticks: {
+          font: {
+            size: 14, // x축 눈금 폰트 크기 조정
+          },
+        },
+      },
+      y: {
+        grid: {
+          drawBorder: false, // y축 외곽선 제거
+          color: "#e0e0e0", // y축 그리드 색상 변경
+        },
+        ticks: {
+          font: {
+            size: 14, // y축 눈금 폰트 크기 조정
+          },
+          callback: function (value) {
+            return value + "원"; // y축 눈금에 단위 추가
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          boxWidth: 20,
+          padding: 20,
+        },
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: "rgba(0,0,0,0.7)",
+        bodyFont: {
+          size: 14,
+        },
+        callbacks: {
+          label: function (tooltipItem) {
+            return (
+              tooltipItem.dataset.label + ": " + tooltipItem.parsed.y + "원"
+            );
+          },
+        },
+      },
+    },
+    elements: {
+      point: {
+        radius: 5, // 데이터 포인트의 반지름
+        hoverRadius: 8, // 마우스 호버 시 데이터 포인트의 반지름
+        hoverBackgroundColor: "orange", // 마우스 호버 시 배경 색상
+      },
+      line: {
+        tension: 0.4, // 선의 곡률
+        borderWidth: 2, // 선의 두께
+      },
+    },
+    animation: {
+      duration: 1500, // 애니메이션 지속 시간
+    },
+  };
+
   return (
     <>
       {/* <PanelHeader
@@ -112,19 +255,30 @@ function Dashboard() {
         size="lg"
         content={<Line data={chartData} options={{ responsive: true }} />}
       /> */}
-      <h5 className="card-category">Price Data</h5>
-      <PanelHeader
+      {/* <PanelHeader
         size="lg"
         content={
-          <Line data={chartData} options={dashboardPanelChart.options} />
+          // <Line data={chartData} options={dashboardPanelChart.options} />
+          <Line data={chartData} options={chartOptions} />
         }
       />
       <h5 className="card-category">Predcition Data</h5>
+
       <PanelHeader
         size="lg"
-        content={<Line data={predData} options={dashboardPanelChart.options} />}
-      />
-      <div className="content">
+        // content={<Line data={predData} options={dashboardPanelChart.options} />}
+        content={<Line data={predData} options={chartOptions} />}
+      /> */}
+      <h5 className="card-category">Price Data</h5>
+      <div className="chart-container">
+        <Line data={chartData} options={chartOptions} />
+      </div>
+      {/* <h5 className="card-category">Predcition Data</h5>
+      <div className="chart-container">
+        <Line data={predData} options={chartOptions} />
+      </div> */}
+
+      {/* <div className="content">
         <Row>
           <Col xs={12} md={4}>
             <Card className="card-chart">
@@ -434,7 +588,7 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-      </div>
+      </div> */}
     </>
   );
 }

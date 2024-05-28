@@ -56,8 +56,8 @@ function Predict() {
     fetch("http://ajoufe.iptime.org:5556/pred")
       .then((response) => response.json())
       .then((data) => {
-        const labels = data.map((item) => item.ymd).reverse();
-        const dataPoints = data.map((item) => item.pred).reverse();
+        const labels = data.map((item) => item.ymd);
+        const dataPoints = data.map((item) => item.pred);
         setPredData({
           labels: labels,
           datasets: [
@@ -109,7 +109,8 @@ function Predict() {
             배추는 다음달 가격 {predData.datasets[0].data[0]}원으로 예상 됩니다.
           </p>
           <p>
-            1달 전 대비 <span className="bold-red">{predReturns}%</span>
+            현재 ({nowData.labels[0]}) 대비{" "}
+            <span className="bold-red">{predReturns}%</span>
             입니다.
           </p>
           <p>
