@@ -10,6 +10,7 @@ sys.path.append(parent_dir)
 import api.kamis_api as kamis
 import api.weather_api as weather
 import crawling.nongnet as nongnet
+import crawling.bigkinds as bigkinds
 import datetime
 
 import pymysql
@@ -147,7 +148,32 @@ def insert_dosomae(date: datetime.datetime = datetime.datetime.now()-datetime.ti
     # DB 연결 종료
     conn.close()
 
+def insert_bigkinds():
+
+    host, user, password, db = get_db_env()
+    # DB 연결
+    conn = pymysql.connect(host=host, user=user, password=password, db=db, charset='utf8') 
+    curs = conn.cursor()
+
+    df = pd.DataFrame(bigkinds.get_topics())
+    df['ymd'] = datetime.datetime.now().strftime('%Y-%m-%d')
+    df = df[['ymd', 'id', 'level', 'name', 'weight']]
+
+    # 데이터 저장
+    for i in range(len(df)):
+        sql = f"INSERT INTO bigkinds VALUES ('{df['ymd'][i]}', '{df['id'][i]}', '{df['level'][i]}', '{df['name'][i]}', '{df['weight'][i]}')"
+        curs.execute(sql)
+    conn.commit() 
+    conn.close()
+
+
+
 def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedelta(days=2)):
+     # nongnet table 데이터 추가
+    insert_nongnet()
+
+    insert_bigkinds()
+ 
     insert_row(get_api_data(date))
     pred = predict.predict_update_price()
 
@@ -158,10 +184,22 @@ def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedel
     # db에 예측값 추가
     insert_row(get_api_data(date, pred=pred))
 
-    # nongnet table 데이터 추가
-    insert_nongnet()
 
 
 while True:
-    time.sleep(86400) # 1 day
-    update_db()
+    try:
+        update_db()
+    finally:
+        time.sleep(86400)
+
+
+# host, user, password, db = get_db_env()
+# # DB 연결
+# conn = pymysql.connect(host=host, user=user, password=password, db=db, charset='utf8') 
+# curs = conn.cursor()
+# sql = "ALTER TABLE bigkinds CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# curs.execute(sql)
+# conn.commit()
+# conn.close()
+
+

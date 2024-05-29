@@ -80,6 +80,3 @@ def get_topics():
         print(f"Error: {response.status_code}")
 
     return topics
-
-
-print(get_topics())

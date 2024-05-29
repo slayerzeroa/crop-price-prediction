@@ -6,7 +6,6 @@ function Service() {
   return (
     <div>
       <IndexNavbar />
-
       <Introduce />
     </div>
   );
