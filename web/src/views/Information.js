@@ -127,7 +127,7 @@ function Information() {
                       <hr />
                       <div className="stats">
                         <i className="now-ui-icons loader_refresh spin" />{" "}
-                        Updated 3 minutes ago
+                        Updated 1 day ago
                       </div>
                     </CardFooter>
                   </Card>
@@ -147,7 +147,7 @@ function Information() {
                       <hr />
                       <div className="stats">
                         <i className="now-ui-icons loader_refresh spin" />{" "}
-                        Updated 3 minutes ago
+                        Updated 1 day ago
                       </div>
                     </CardFooter>
                   </Card>
