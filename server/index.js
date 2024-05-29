@@ -161,6 +161,25 @@ app.get("/dosomae", (req, res) => {
   });
 });
 
+
+// bigkinds 데이터 읽어오기
+app.get("/bigkinds", (req, res) => {
+  const results = [];
+  // mariadb에서 데이터 읽어오기
+  pool.getConnection().then((conn) => {
+    conn
+    // ymd가 오늘 날짜인 데이터
+      .query("SELECT * FROM bigkinds WHERE ymd = CURDATE()")
+      .then((rows) => {
+        rows.forEach((row) => {
+          results.push(row);
+        });
+        res.json(results);
+      });
+    conn.release();
+  });
+});
+
 const PORT = 5556;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -7,6 +7,26 @@ import 수급조절 from "../assets/img/images/수급조절.png";
 import "../components/Navbars/Predict.css";
 import Chartcard from "../views/Chartcard";
 
+import "./Predict.css"; // CSS 파일 임포트
+
+// predLevel 함수 정의
+function predLevel(predReturns) {
+  if (predReturns > 40) {
+    return { label: "심각 단계", className: "text-red" };
+  } else if (predReturns > 25) {
+    return { label: "경계 단계", className: "text-orange" };
+  } else if (predReturns > 10) {
+    return { label: "주의 단계", className: "text-yellow" };
+  } else if (predReturns >= -10) {
+    return { label: "안정 단계", className: "text-green" };
+  } else if (predReturns > -25) {
+    return { label: "주의 단계", className: "text-yellow" };
+  } else if (predReturns > -35) {
+    return { label: "경계 단계", className: "text-orange" };
+  } else if (predReturns < -45) {
+    return { label: "심각 단계", className: "text-red" };
+  }
+}
 function Predict() {
   const [nowData, setNowData] = useState({
     labels: [],
@@ -77,23 +97,10 @@ function Predict() {
     100
   ).toFixed(2);
 
-  function predLevel(predReturns) {
-    if (predReturns > 40) {
-      return "심각 단계";
-    } else if (predReturns > 30) {
-      return "경계 단계";
-    } else if (predReturns > 20) {
-      return "주의 단계";
-    } else if (predReturns > 10 && predReturns < -10) {
-      return "안정 단계";
-    } else if (predReturns < -20) {
-      return "주의 단계";
-    } else if (predReturns < -30) {
-      return "경계 단계";
-    } else if (predReturns < -40) {
-      return "심각 단계";
-    }
-  }
+  const levelInfo = predLevel(predReturns) || {
+    label: "데이터 처리 중",
+    className: "text-gray",
+  }; // Provide a fallback for levelInfo
 
   return (
     <div className="predict-title">
@@ -109,13 +116,14 @@ function Predict() {
             배추는 다음달 가격 {predData.datasets[0].data[0]}원으로 예상 됩니다.
           </p>
           <p>
-            현재 ({nowData.labels[0]}) 대비{" "}
-            <span className="bold-red">{predReturns}%</span>
+            ({nowData.labels[0]})기준 가격 {nowData.datasets[0].data[0]}원 대비{" "}
+            <span className={levelInfo.className}>{predReturns}%</span>
             입니다.
           </p>
           <p>
             농산물 수급조절 매뉴얼 기준{" "}
-            <span className="bold-green">{predLevel(predReturns)}</span>입니다.
+            <span className={levelInfo.className}>{levelInfo.label}</span>
+            입니다.
           </p>
         </div>
       </div>
