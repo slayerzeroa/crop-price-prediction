@@ -1,7 +1,0 @@
-/web/node_modules
-/server/node_modules
-/model/trained
-/data/raw
-/env
-/catboost_info
-/server/index.js

@@ -1,2 +1,0 @@
-import kamis_api
-import weather_api
