@@ -7,29 +7,28 @@ const app = express();
 const path = require("path");
 const cors = require("cors");
 
-// // env\db\db_env.txt 파일에서 DB 정보 읽어오기
-// const fs = require("fs");
-// const dotenv = require("dotenv");
-// dotenv.config();
+// env\db\db_env.txt 파일에서 DB 정보 읽어오기
+const fs = require("fs");
+const dotenv = require("dotenv");
+dotenv.config();
 
-// const db_env = fs
-//   .readFileSync(path.join(__dirname, "../env/db/db_env.txt"))
-//   .toString();
-// const db_env_list = db_env.split("\n");
+const db_env = fs
+  .readFileSync(path.join(__dirname, "../env/db/db_env.txt"))
+  .toString();
+const db_env_list = db_env.split("\n");
 
-// const db_host = db_env_list[0].split("\r")[0];
-// const db_user = db_env_list[1].split("\r")[0];
-// const db_password = db_env_list[2].split("\r")[0];
-// const db_database = db_env_list[3].split("\r")[0];
-// //
+const db_host = db_env_list[0].split("\r")[0];
+const db_user = db_env_list[1].split("\r")[0];
+const db_password = db_env_list[2].split("\r")[0];
+const db_database = db_env_list[3].split("\r")[0];
 
 // mariadb 연결
 const mariadb = require("mariadb");
 const pool = mariadb.createPool({
-  host: "ajoufe.iptime.org",
-  user: "Ajou",
-  password: "0i!gx8D4uD5gRJdS",
-  database: "aicapstone",
+  host: db_host,
+  user: db_user,
+  password: db_password,
+  database: db_database,
   connectionLimit: 5,
 });
 
@@ -161,14 +160,13 @@ app.get("/dosomae", (req, res) => {
   });
 });
 
-
 // bigkinds 데이터 읽어오기
 app.get("/bigkinds", (req, res) => {
   const results = [];
   // mariadb에서 데이터 읽어오기
   pool.getConnection().then((conn) => {
     conn
-    // ymd가 오늘 날짜인 데이터
+      // ymd가 오늘 날짜인 데이터
       .query("SELECT * FROM bigkinds WHERE ymd = CURDATE()")
       .then((rows) => {
         rows.forEach((row) => {
