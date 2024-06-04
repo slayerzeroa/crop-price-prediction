@@ -77,6 +77,6 @@ import datetime
 #     except:
 #         pass
 #     date -= datetime.timedelta(days=1)
-
+# ss
 
 print(kamis.get_item_price_at_date(datetime.datetime.now()-datetime.timedelta(days=1)))
