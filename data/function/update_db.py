@@ -184,13 +184,18 @@ def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedel
     # db에 예측값 추가
     insert_row(get_api_data(date, pred=pred))
 
+# update_db()
 
 
 while True:
-    try:
-        update_db()
-    finally:
-        time.sleep(86400)
+    ## 매일 00시 01분에 실행
+    now = datetime.datetime.now()
+    if now.hour == 0 and now.minute == 1:
+        try:
+            update_db()
+            print('DB update success')
+        except Exception as e:
+            print(e)
 
 
 # host, user, password, db = get_db_env()
