@@ -184,8 +184,13 @@ def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedel
     # db에 예측값 추가
     insert_row(get_api_data(date, pred=pred))
 
-# update_db()
+# update_db(datetime.datetime.now()-datetime.timedelta(days=6))
+# update_db(datetime.datetime.now()-datetime.timedelta(days=5))
+# update_db(datetime.datetime.now()-datetime.timedelta(days=4))
+# update_db(datetime.datetime.now()-datetime.timedelta(days=3))
 
+
+update_db(datetime.datetime.now()-datetime.timedelta(days=1))
 
 while True:
     ## 매일 00시 01분에 실행
