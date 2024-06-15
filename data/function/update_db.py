@@ -187,12 +187,17 @@ def update_db(date: datetime.datetime = datetime.datetime.now()-datetime.timedel
 while True:
     ## 매일 00시 01분에 실행
     now = datetime.datetime.now()
-    if now.hour == 0 and now.minute == 1:
+    if now.hour == 1 and now.minute == 23:
         try:
+            print('DB update start')
             update_db()
+            print(now.strftime('%Y-%m-%d %H:%M:%S'))
             print('DB update success')
         except Exception as e:
             print(e)
+
+
+
 
 
 # host, user, password, db = get_db_env()
